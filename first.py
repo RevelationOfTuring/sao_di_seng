@@ -56,6 +56,8 @@ class SmaCross(bt.Strategy):
         # 获取上一根bar开始，向前10个的open值
         my_slice = self.datas[0].open.get(ago=-1, size=3)  # 改写法只能在next()中
         print(my_slice)
+        print(self.datas[0].close)
+        print(self.data0_close)
 
 
 ##########################
