@@ -13,6 +13,25 @@ class SmaCross(bt.Strategy):
         # 移动平均线指标
         self.move_average = bt.ind.MovingAverageSimple(
             self.datas[0].close, period=self.params.period)
+        # 注：在init方法中，含线对象中的第一根线是其默认线
+        # self.move_average = bt.ind.MovingAverageSimple(
+        #     self.datas[0], period=self.params.period)  # 等价于上语句
+
+        # 在定义指标时也可以直接省略self.datas[0].close（线参数），这时bt会默认取self.datas[0]中的第一条线作为输入，即上面等价于
+        # self.move_average = bt.ind.MovingAverageSimple(period=self.p.period)
+
+        # self.move_average和self.datas[0]都是一个含线对象
+        print(self.move_average.lines.getlinealiases())  # ('sma',)
+        print(self.datas[
+                  0].lines.getlinealiases())  # ('close', 'low', 'high', 'open', 'volume', 'openinterest', 'datetime')
+
+        self.datas[0].lines.close  # 访问线
+        self.datas[0].lines[0]  # 等价于上面，self.datas[0]中有7根线，第一根就是close
+        self.datas[0].close  # 等价于上面，最常用的写法
+
+        # 在init方法中，利用圆括号生成错位的线
+        self.dataearly = self.data.close(-1)  # 收盘价集体下移一天
+        self.datalate = self.data.close(1)  # 收盘价集体上移一天
 
     def next(self):
 
@@ -25,6 +44,18 @@ class SmaCross(bt.Strategy):
         elif self.datas[0].close[-1] > self.move_average.sma[-1] and \
                 self.datas[0].close[0] < self.move_average.sma[0]:
             self.sell(size=100)
+
+        # 注：在next方法中，self.datas[0].close是self.datas[0].close[0]的简写形式，即next方法中线对象默认为该对象的当前值
+        # 在next方法中，含线对象可以当做是其默认线的当前值，即self.datas[0]也是self.datas[0].close[0]的简写形式。
+
+        print(f'该bar是第几根bar：{len(self)}')
+        print(f'当前data线长：{len(self.datas[0])}')
+        print(f'总data线长：{self.datas[0].buflen()}')
+
+        # 得到线的一个切片
+        # 获取上一根bar开始，向前10个的open值
+        my_slice = self.datas[0].open.get(ago=-1, size=3)  # 改写法只能在next()中
+        print(my_slice)
 
 
 ##########################
