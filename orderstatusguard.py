@@ -1,3 +1,5 @@
+# 当交易中存在pending order时，如何编写策略
+
 from datetime import datetime
 from datetime import timedelta
 import backtrader as bt
