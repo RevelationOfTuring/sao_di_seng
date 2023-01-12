@@ -74,7 +74,7 @@ cerebro = bt.Cerebro()
 # 获取本脚本文件所在路径
 modpath = os.path.dirname(os.path.abspath(sys.argv[0]))
 # 拼接得到数据文件全路径
-datapath = os.path.join(modpath, 'data/600000qfq.csv')
+datapath = os.path.join(modpath, '../data/600000qfq.csv')
 
 # 创建行情数据对象，加载数据
 data = bt.feeds.GenericCSVData(
